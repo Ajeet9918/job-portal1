@@ -1,12 +1,83 @@
-# React + Vite
+# 🧑‍💼 Job Portal (MERN Stack)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-featured job portal web application built using the **MERN** stack (MongoDB, Express.js, React.js, Node.js). This platform allows job seekers to register and apply for jobs, and employers to post and manage job listings — all with a user-friendly interface and secure authentication.
 
-Currently, two official plugins are available:
+## 🔗 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 👨‍💻 Job Seeker
+- Register & login securely
+- Search & filter jobs by title, company, location
+- Apply for jobs directly
+- View applied jobs
+
+### 🏢 Employer
+- Employer registration/login
+- Post new job listings
+- Manage and edit job posts
+- View applicants
+
+### ⚙️ General
+- JWT-based authentication
+- Role-based access control
+- Responsive design (mobile-friendly)
+- Error handling and form validations
+
+---
+
+## 🛠️ Tech Stack
+
+| Tech        | Description                         |
+|-------------|-------------------------------------|
+| **MongoDB** | NoSQL database for storing data     |
+| **Express** | Backend framework (Node.js)         |
+| **React**   | Frontend UI framework               |
+| **Node.js** | JavaScript runtime (backend)        |
+| **Axios**   | HTTP requests                       |
+| **JWT**     | Secure authentication               |
+| **Mongoose**| MongoDB ODM                         |
+| **Tailwind CSS** (or CSS)| Styling                |
+
+---
+
+
+---
+
+## 🧪 Setup Instructions
+
+### 📦 Prerequisites
+- Node.js & npm
+- MongoDB installed or MongoDB Atlas account
+
+### 🧰 Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Ajeet9918/job-portal1.git
+   cd job-portal1
+
+
+### backend setup
+cd server
+npm install
+touch .env
+
+
+### Add environment variables in .env:
+MONGO_URI=your_mongo_uri
+JWT_SECRET=your_jwt_secret
+PORT=your_port_number
+
+### start backend
+npm start
+
+
+### frontend setup
+cd ../client
+npm install
+npm start
+
+
