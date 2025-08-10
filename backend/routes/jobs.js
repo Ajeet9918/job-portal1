@@ -5,11 +5,50 @@ const auth = require('../middleware/auth');
 const Job = require('../models/Job');
 
 // @route   GET api/jobs
-// @desc    Get all jobs
+// @desc    Get all jobs with search and filtering
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const jobs = await Job.find().sort({ createdAt: -1 });
+    const { search, location, jobType, salary, experience, remote } = req.query;
+
+    let query = {};
+
+    // Search functionality
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { company: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { requirements: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    // Location filter
+    if (location) {
+      query.location = { $regex: location, $options: 'i' };
+    }
+
+    // Remote filter
+    if (remote === 'true') {
+      query.location = { $regex: 'remote', $options: 'i' };
+    }
+
+    // Job type filter
+    if (jobType) {
+      query.jobType = jobType;
+    }
+
+    // Salary filter
+    if (salary) {
+      query.salary = { $regex: salary, $options: 'i' };
+    }
+
+    // Experience filter
+    if (experience) {
+      query.experience = experience;
+    }
+
+    const jobs = await Job.find(query).sort({ createdAt: -1 });
     res.json(jobs);
   } catch (err) {
     console.error(err.message);

@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Menu, X, Briefcase, User, Bell, Settings } from 'lucide-react';
+import { Search, Menu, X, Briefcase, User, Bell, Settings, Scale, FileText, Star } from 'lucide-react';
 import { useJob } from '../context/JobContext';
 import { useAuth } from '../context/AuthContext';
 import AuthModal from '../context/AuthModel';
+import JobComparison from './JobComparison';
+import ApplicationTracker from './ApplicationTracker';
+import CompanyReviews from './CompanyReviews';
+import DarkModeToggle from './DarkModeToggle';
+import PushNotifications from './PushNotifications';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showJobComparison, setShowJobComparison] = useState(false);
+  const [showApplicationTracker, setShowApplicationTracker] = useState(false);
+  const [showCompanyReviews, setShowCompanyReviews] = useState(false);
+  const [showPushNotifications, setShowPushNotifications] = useState(false);
   const { savedJobs } = useJob();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleNavClick = (section) => {
     setIsMenuOpen(false);
-    switch(section) {
+    switch (section) {
       case 'jobs':
         const jobsSection = document.getElementById('jobs-section');
         if (jobsSection && window.location.pathname === '/') {
@@ -64,8 +73,8 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <div 
-              className="flex items-center space-x-2 cursor-pointer" 
+            <div
+              className="flex items-center space-x-2 cursor-pointer"
               onClick={() => navigate('/')}
             >
               <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-2 rounded-lg">
@@ -78,25 +87,25 @@ const Navbar = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <button 
+              <button
                 onClick={() => handleNavClick('jobs')}
                 className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
               >
                 Jobs
               </button>
-              <button 
+              <button
                 onClick={() => handleNavClick('companies')}
                 className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
               >
                 Companies
               </button>
-              <button 
+              <button
                 onClick={() => handleNavClick('salary')}
                 className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
               >
                 Salary
               </button>
-              <button 
+              <button
                 onClick={() => handleNavClick('resources')}
                 className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
               >
@@ -106,9 +115,41 @@ const Navbar = () => {
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-4">
-              <button 
-                onClick={() => navigate('/notifications')}
+              {/* Dark Mode Toggle */}
+              <DarkModeToggle />
+
+              {/* Job Comparison */}
+              <button
+                onClick={() => setShowJobComparison(true)}
+                className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                title="Compare Jobs"
+              >
+                <Scale className="w-5 h-5" />
+              </button>
+
+              {/* Application Tracker */}
+              <button
+                onClick={() => setShowApplicationTracker(true)}
+                className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                title="Application Tracker"
+              >
+                <FileText className="w-5 h-5" />
+              </button>
+
+              {/* Company Reviews */}
+              <button
+                onClick={() => setShowCompanyReviews(true)}
+                className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                title="Company Reviews"
+              >
+                <Star className="w-5 h-5" />
+              </button>
+
+              {/* Push Notifications */}
+              <button
+                onClick={() => setShowPushNotifications(true)}
                 className="p-2 text-gray-600 hover:text-blue-600 transition-colors relative"
+                title="Notifications"
               >
                 <Bell className="w-5 h-5" />
                 {savedJobs.length > 0 && (
@@ -117,21 +158,25 @@ const Navbar = () => {
                   </span>
                 )}
               </button>
+
               {user && (
-                <button 
+                <button
                   onClick={() => navigate('/profile')}
                   className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                  title="Profile"
                 >
                   <User className="w-5 h-5" />
                 </button>
               )}
-              <button 
+
+              <button
                 onClick={handleAuthClick}
                 className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
               >
                 {user ? `Hi, ${user.name.split(' ')[0]}` : 'Sign In'}
               </button>
-              <button 
+
+              <button
                 onClick={handlePostJobClick}
                 className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:from-blue-700 hover:to-cyan-600 transition-all transform hover:scale-105 font-medium"
               >
@@ -152,25 +197,25 @@ const Navbar = () => {
           {isMenuOpen && (
             <div className="md:hidden border-t border-gray-200 bg-white/95 backdrop-blur-md">
               <div className="px-2 pt-2 pb-3 space-y-1">
-                <button 
+                <button
                   onClick={() => handleNavClick('jobs')}
                   className="block w-full text-left px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors font-medium"
                 >
                   Jobs
                 </button>
-                <button 
+                <button
                   onClick={() => handleNavClick('companies')}
                   className="block w-full text-left px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors font-medium"
                 >
                   Companies
                 </button>
-                <button 
+                <button
                   onClick={() => handleNavClick('salary')}
                   className="block w-full text-left px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors font-medium"
                 >
                   Salary
                 </button>
-                <button 
+                <button
                   onClick={() => handleNavClick('resources')}
                   className="block w-full text-left px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors font-medium"
                 >
@@ -178,7 +223,7 @@ const Navbar = () => {
                 </button>
                 <div className="border-t border-gray-200 pt-3 mt-3">
                   {user && (
-                    <button 
+                    <button
                       onClick={() => {
                         navigate('/notifications');
                         setIsMenuOpen(false);
@@ -194,7 +239,7 @@ const Navbar = () => {
                       )}
                     </button>
                   )}
-                  <button 
+                  <button
                     onClick={() => {
                       handleAuthClick();
                       setIsMenuOpen(false);
@@ -203,7 +248,7 @@ const Navbar = () => {
                   >
                     {user ? `Sign Out (${user.name.split(' ')[0]})` : 'Sign In'}
                   </button>
-                  <button 
+                  <button
                     onClick={() => {
                       handlePostJobClick();
                       setIsMenuOpen(false);
@@ -220,6 +265,28 @@ const Navbar = () => {
       </nav>
 
       {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+
+      {/* Feature Modals */}
+      <JobComparison
+        isOpen={showJobComparison}
+        onClose={() => setShowJobComparison(false)}
+      />
+
+      <ApplicationTracker
+        isOpen={showApplicationTracker}
+        onClose={() => setShowApplicationTracker(false)}
+      />
+
+      <CompanyReviews
+        company="TechCorp"
+        isOpen={showCompanyReviews}
+        onClose={() => setShowCompanyReviews(false)}
+      />
+
+      <PushNotifications
+        isOpen={showPushNotifications}
+        onClose={() => setShowPushNotifications(false)}
+      />
     </>
   );
 };

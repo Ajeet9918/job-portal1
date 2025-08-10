@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../../api';
 
 const initialJobs = [
   {
@@ -110,7 +111,9 @@ const initialJobs = [
 const JobContext = createContext();
 
 export const JobProvider = ({ children }) => {
-  const [jobs] = useState(initialJobs);
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [savedJobs, setSavedJobs] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [locationQuery, setLocationQuery] = useState('');
@@ -120,6 +123,27 @@ export const JobProvider = ({ children }) => {
     experience: '',
     remote: false
   });
+
+  // Load jobs from API
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        setLoading(true);
+        const jobsData = await api.getJobs();
+        setJobs(jobsData);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching jobs:', err);
+        setError('Failed to load jobs');
+        // Fallback to static data if API fails
+        setJobs(initialJobs);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
 
   const saveJob = (jobId) => {
     setSavedJobs(prev => [...prev, jobId]);
@@ -134,10 +158,10 @@ export const JobProvider = ({ children }) => {
   };
 
   const filteredJobs = jobs.filter(job => {
-    const matchesSearch = searchQuery === '' || 
+    const matchesSearch = searchQuery === '' ||
       job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      (job.tags && job.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())));
 
     const matchesLocation = locationQuery === '' ||
       job.location.toLowerCase().includes(locationQuery.toLowerCase()) ||
@@ -153,6 +177,8 @@ export const JobProvider = ({ children }) => {
   return (
     <JobContext.Provider value={{
       jobs,
+      loading,
+      error,
       savedJobs,
       searchQuery,
       locationQuery,

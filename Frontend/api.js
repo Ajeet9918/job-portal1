@@ -31,9 +31,19 @@ const login = async (userData) => {
   return response.data;
 };
 
-// Get all jobs
-const getJobs = async () => {
-  const response = await axios.get(`${API_URL}/jobs`);
+// Get all jobs with search and filters
+const getJobs = async (params = {}) => {
+  const queryParams = new URLSearchParams();
+  
+  if (params.search) queryParams.append('search', params.search);
+  if (params.location) queryParams.append('location', params.location);
+  if (params.jobType) queryParams.append('jobType', params.jobType);
+  if (params.salary) queryParams.append('salary', params.salary);
+  if (params.experience) queryParams.append('experience', params.experience);
+  if (params.remote) queryParams.append('remote', params.remote);
+  
+  const url = queryParams.toString() ? `${API_URL}/jobs?${queryParams.toString()}` : `${API_URL}/jobs`;
+  const response = await axios.get(url);
   return response.data;
 };
 

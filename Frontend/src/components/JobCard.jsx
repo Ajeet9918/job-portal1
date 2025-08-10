@@ -4,13 +4,14 @@ import { useJob } from '../context/JobContext';
 
 const JobCard = ({ job }) => {
   const { saveJob, unsaveJob, isJobSaved } = useJob();
-  const saved = isJobSaved(job.id);
+  const jobId = job._id || job.id;
+  const saved = isJobSaved(jobId);
 
   const handleSaveJob = () => {
     if (saved) {
-      unsaveJob(job.id);
+      unsaveJob(jobId);
     } else {
-      saveJob(job.id);
+      saveJob(jobId);
     }
   };
 
@@ -19,9 +20,8 @@ const JobCard = ({ job }) => {
   };
 
   return (
-    <div className={`bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 p-6 border-l-4 ${
-      job.featured ? 'border-gradient-to-b from-cyan-500 to-blue-500' : 'border-gray-200'
-    } relative overflow-hidden group`}>
+    <div className={`bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 p-6 border-l-4 ${job.featured ? 'border-gradient-to-b from-cyan-500 to-blue-500' : 'border-gray-200'
+      } relative overflow-hidden group`}>
       {/* Featured Badge */}
       {job.featured && (
         <div className="absolute top-4 right-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
@@ -85,18 +85,17 @@ const JobCard = ({ job }) => {
       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
         <span className="text-gray-500 text-sm">{job.postedAt}</span>
         <div className="flex space-x-2">
-          <button 
+          <button
             onClick={handleSaveJob}
-            className={`px-4 py-2 rounded-lg transition-colors font-medium flex items-center space-x-1 ${
-              saved 
-                ? 'text-red-600 bg-red-50 hover:bg-red-100' 
+            className={`px-4 py-2 rounded-lg transition-colors font-medium flex items-center space-x-1 ${saved
+                ? 'text-red-600 bg-red-50 hover:bg-red-100'
                 : 'text-blue-600 hover:bg-blue-50'
-            }`}
+              }`}
           >
             <Heart className={`w-4 h-4 ${saved ? 'fill-current' : ''}`} />
             <span>{saved ? 'Saved' : 'Save'}</span>
           </button>
-          <button 
+          <button
             onClick={handleApply}
             className="px-6 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:from-blue-700 hover:to-cyan-600 transition-all transform hover:scale-105 font-medium"
           >

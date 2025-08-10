@@ -3,7 +3,7 @@ import JobCard from './JobCard';
 import { useJob } from '../context/JobContext';
 
 const JobGrid = () => {
-  const { filteredJobs } = useJob();
+  const { filteredJobs, loading, error } = useJob();
   const [showAll, setShowAll] = React.useState(false);
 
   const displayedJobs = showAll ? filteredJobs : filteredJobs.slice(0, 6);
@@ -20,22 +20,36 @@ const JobGrid = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayedJobs.map(job => (
-            <JobCard key={job.id} job={job} />
-          ))}
-        </div>
-
-        {filteredJobs.length === 0 && (
+        {loading ? (
           <div className="text-center py-12">
-            <div className="text-gray-500 text-lg mb-4">No jobs found matching your criteria</div>
-            <p className="text-gray-400">Try adjusting your search terms or filters</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading jobs...</p>
           </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <div className="text-red-500 text-lg mb-4">{error}</div>
+            <p className="text-gray-400">Please try again later</p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {displayedJobs.map(job => (
+                <JobCard key={job._id || job.id} job={job} />
+              ))}
+            </div>
+
+            {filteredJobs.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-gray-500 text-lg mb-4">No jobs found matching your criteria</div>
+                <p className="text-gray-400">Try adjusting your search terms or filters</p>
+              </div>
+            )}
+          </>
         )}
 
         {filteredJobs.length > 6 && (
           <div className="text-center mt-12">
-            <button 
+            <button
               onClick={() => setShowAll(!showAll)}
               className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:from-blue-700 hover:to-cyan-600 transition-all transform hover:scale-105 font-medium"
             >
